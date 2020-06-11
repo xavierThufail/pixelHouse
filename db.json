@@ -1,3 +1,8 @@
 {
-  "test": "a"
+  "tests": [
+    {
+      "id": 1,
+      "name": "xavier"
+    }
+  ]
 }
