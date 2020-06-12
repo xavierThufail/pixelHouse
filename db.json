@@ -1,8 +1,19 @@
 {
-  "tests": [
+  "boards": [
     {
       "id": 1,
-      "name": "xavier"
+      "title": "test",
+      "kanban": [
+        {
+          "name": "Not Started",
+          "lists": [
+            {
+              "title": "test",
+              "desc": "belajar desc"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
