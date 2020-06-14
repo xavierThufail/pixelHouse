@@ -9,7 +9,8 @@
           "id": 1,
           "lists": [
             {
-              "title": "test"
+              "title": "test",
+              "id": 1
             }
           ]
         }

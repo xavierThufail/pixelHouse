@@ -13,7 +13,7 @@
       <div v-if="inputCard">
         <input v-model="titleCard" type="text" placeholder="Input title card" class="input-container"/>
         <div style="display: flex;">
-          <div class="btn-add">
+          <div class="btn-add" @click="addCard">
             <span>Add Card</span>
           </div>
           <div @click="add" class="btn-add" style="margin-left: 10px">
@@ -49,7 +49,7 @@ export default {
     return {
       cars: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0],
       modal: false,
-      inputCard: true,
+      inputCard: false,
       titleCard: ''
     }
   },
@@ -72,12 +72,13 @@ export default {
       const board = this.$store.getters.getBoardById(this.id)
       board.kanban = board.kanban.map(kanban => {
         if (kanban.id === this.lists.id) {
-          kanban.lists.push({ title: this.titleCard })
+          kanban.lists.push({ title: this.titleCard, id: kanban.lists.length + 1 })
         }
         return kanban
       })
       this.$store.dispatch('addCard', board)
       this.titleCard = ''
+      this.inputCard = !this.inputCard
     }
   }
 }
