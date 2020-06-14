@@ -1,10 +1,21 @@
 <template>
   <div>
-    <div class="nav-board">
+    <div class="nav-board" v-if="inputBoard">
       <router-link to="/dashboard">
-        <img class="nav-icon" src="../assets/back.png" alt="" height="30px" width="30px">
+        <img src="../assets/back.png" alt="" height="30px" width="30px">
       </router-link>
-      <h2>{{board.title}}</h2>
+      <input class="nav-input" type="text" v-model="board.title">
+      <img @click="editBoardTitle" class="nav-icon" src="../assets/ok.png" alt="">
+    </div>
+    <div class="nav-board" v-else>
+      <router-link to="/dashboard">
+        <img src="../assets/back.png" alt="" height="30px" width="30px">
+      </router-link>
+      <h2 style="margin-right: 30px">{{board.title}}</h2>
+      <img @click="showInputTitle" class="nav-icon" src="../assets/edit.png" alt="" style="padding: 5px">
+      <router-link to="/dashboard" class="nav-icon">
+        <img @click="deleteBoard" src="../assets/trash.png" height="30px" width="30px" alt="">
+      </router-link>
     </div>
     <div class="kanban-container">
       <List
@@ -54,8 +65,9 @@ export default {
     return {
       board: {},
       cars: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0],
-      inputList: true,
-      nameList: ''
+      inputList: false,
+      nameList: '',
+      inputBoard: false
     }
   },
   methods: {
@@ -65,10 +77,21 @@ export default {
     addList () {
       const board = this.board
       if (this.nameList === '') this.nameList = 'Null'
-      board.kanban.push({ id: board.kanban.length + 1, lists: [], name: this.nameList })
+      board.kanban.push({ id: board.kanban.length + 1, cards: [], name: this.nameList })
       this.$store.dispatch('patchBoard', board)
       this.inputList = !this.inputList
       this.nameList = ''
+    },
+    editBoardTitle () {
+      const board = this.board
+      this.$store.dispatch('patchBoard', board)
+      this.inputBoard = false
+    },
+    showInputTitle () {
+      this.inputBoard = true
+    },
+    deleteBoard () {
+      this.$store.dispatch('deleteBoard', this.id)
     }
   },
   beforeMount () {
@@ -81,14 +104,40 @@ export default {
 .nav-board {
   display: flex;
   padding: 0 30px;
+  align-items: center;
 }
 
 .nav-board h2 {
   margin-left: 30px;
 }
 
+.nav-board input {
+  margin-left: 30px;
+}
+
+.nav-icon {
+  height: 30px;
+  width: 30px;
+  border-radius: 5px;
+}
+
+.nav-icon:hover {
+  cursor: pointer;
+  background-color: #7d8185ad;
+}
+
+.nav-input {
+  padding: 5px;
+  border-radius: 5px;
+  margin-right: 5px;
+}
+
+.nav-input:focus {
+  outline: none;
+}
+
 .kanban-container {
-  padding: 0 30px;
+  padding: 30px;
   overflow: auto;
   white-space: nowrap;
   height: 85vh;

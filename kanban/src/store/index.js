@@ -6,14 +6,19 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    start: false,
     boards: [],
     error: null,
     loading: false,
     showModal: false,
     modalList: 0,
-    inputCard: 0
+    inputCard: 0,
+    modalBoard: 0
   },
   mutations: {
+    SET_START (state) {
+      state.start = true
+    },
     SET_BOARD (state, boards) {
       state.boards = boards
     },
@@ -31,6 +36,9 @@ export default new Vuex.Store({
     },
     SET_MODALLIST (state, payload) {
       state.modalList = payload
+    },
+    SET_MODALBOARD (state, payload) {
+      state.modalBoard = payload
     },
     SET_INPUTCARD (state, payload) {
       state.inputCard = payload
@@ -61,9 +69,10 @@ export default new Vuex.Store({
           {
             name: 'Not Started',
             id: 1,
-            lists: [
+            cards: [
               {
-                title: 'Welcome to Kanban'
+                title: 'Welcome to Kanban',
+                id: 1
               }
             ]
           }
@@ -89,12 +98,37 @@ export default new Vuex.Store({
           commit('SET_LOADING')
         })
     },
+    deleteBoard ({ commit, state }, id) {
+      commit('SET_LOADING')
+      axios({
+        method: 'delete',
+        // karena ini fake database, jadi idnya cuma bisa 1
+        // url: `https://my-json-server.typicode.com/xavierThufail/pixelHouse/boards/${id}`,
+        url: 'https://my-json-server.typicode.com/xavierThufail/pixelHouse/boards/1'
+      })
+        .then(({ data }) => {
+          const boards = state.boards.filter(board => {
+            if (Number(board.id) !== Number(id)) {
+              console.log(board.id, id)
+              return board
+            }
+          })
+          commit('PATCH_BOARDS', boards)
+        })
+        .catch(err => {
+          commit('SET_ERROR', err)
+        })
+        .finally(_ => {
+          commit('SET_LOADING')
+        })
+    },
+
     // crud table 'Board' complete
     // karena ini cuma 1 table: 'Board', untuk table lists dan card hanya menggunakan patch table 'Board'
     patchBoard ({ commit, state }, board) {
       commit('SET_LOADING')
       axios({
-        method: 'patch',
+        method: 'put',
         // karena ini fake database, jadi idnya cuma bisa 1
         // url: `https://my-json-server.typicode.com/xavierThufail/pixelHouse/boards/${board.id}`,
         url: 'https://my-json-server.typicode.com/xavierThufail/pixelHouse/boards/1',

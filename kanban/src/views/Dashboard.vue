@@ -33,10 +33,11 @@ export default {
 
 <style>
 .dashboard {
-  padding: 30px;
+  padding: 0 30px;
 }
 
 .container {
+  padding: 30px 0;
   display: flex;
   flex-wrap: wrap;
 }

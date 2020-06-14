@@ -1,15 +1,35 @@
 <template>
   <div class="lists-container">
     <div class="flex-container">
-      <div class="lists-title">
-        <h4>{{lists.name}}</h4>
+      <div class="lists-title" v-if="editNameList">
+        <input class="input-nameList" type="text" v-model="nameList" @submit="test">
+        <div style="width: 10%"></div>
+        <img src="../assets/ok.png" alt="ok" class="ok" @click="test">
+      </div>
+      <div class="lists-title" v-else>
+        <h4>{{list.name}}</h4>
         <h4 class="icon-more" @click="modalList">...</h4>
       </div>
-      <Card
-        v-for="(card, i) in list.cards"
-        :key="i"
-        :list="list"
-      />
+      <Draggable
+        v-model="list.cards"
+        v-bind="dragOptions"
+        :move="onMove"
+        @start="isDragging=true"
+        @end="isDragging=false"
+      >
+        <transition-group
+          tag="ul"
+          class="card-group"
+        >
+          <Card
+            v-for="card in list.cards"
+            :key="card.id"
+            :card="card"
+            :boardId="id"
+            :listId="list.id"
+          />
+        </transition-group>
+      </Draggable>
       <div v-if="inputCard">
         <input v-model="titleCard" type="text" placeholder="Input title card" class="input-container"/>
         <div style="display: flex;">
@@ -28,7 +48,7 @@
       >
         <span>+ Add a card</span>
       </div>
-      <div class="modal-list" v-show="$store.state.modalList === lists.id">
+      <div class="modal-list" v-show="$store.state.modalList === list.id">
         <div class="modal-title">
           <span>List Actions</span>
           <span @click="closeModal" style="cursor: pointer">X</span>
@@ -41,7 +61,18 @@
           >
             Add Card
           </span>
-          <span class="action-container">Delete List</span>
+          <span
+            class="action-container"
+            @click="openEdit"
+          >
+            Edit List
+          </span>
+          <span
+            class="action-container"
+            @click="deleteList"
+          >
+            Delete List
+          </span>
         </div>
       </div>
     </div>
@@ -50,22 +81,49 @@
 
 <script>
 import Card from '../components/Card'
+import Draggable from 'vuedraggable'
 
 export default {
   props: ['list', 'id'],
   data () {
     return {
-      cars: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0],
       inputCard: false,
-      titleCard: ''
+      titleCard: '',
+      editable: true,
+      isDragging: false,
+      delayedDragging: false,
+      nameList: this.list.name,
+      editNameList: false
     }
   },
   components: {
-    Card
+    Card,
+    Draggable
+  },
+  watch: {
+    isDragging (newValue) {
+      if (newValue) {
+        this.delayedDragging = true
+        return
+      }
+      this.$nextTick(() => {
+        this.delayedDragging = false
+      })
+    },
+    list (newValue) {
+      console.log(newValue)
+    }
   },
   methods: {
+    onMove ({ relatedContext, draggedContext }) {
+      const relatedElement = relatedContext.element
+      const draggedElement = draggedContext.element
+      return (
+        (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
+      )
+    },
     modalList (props) {
-      this.$store.state.modalList === this.lists.id ? this.$store.commit('SET_MODALLIST', 0) : this.$store.commit('SET_MODALLIST', this.lists.id)
+      this.$store.state.modalList === this.list.id ? this.$store.commit('SET_MODALLIST', 0) : this.$store.commit('SET_MODALLIST', this.list.id)
     },
     closeModal () {
       this.$store.commit('SET_MODALLIST', 0)
@@ -79,8 +137,8 @@ export default {
       const board = this.$store.getters.getBoardById(this.id)
       if (this.titleCard === '') this.titleCard = 'Null'
       board.kanban = board.kanban.map(kanban => {
-        if (kanban.id === this.lists.id) {
-          kanban.lists.push({ title: this.titleCard, id: kanban.lists.length + 1 })
+        if (kanban.id === this.list.id) {
+          kanban.cards.push({ title: this.titleCard, id: kanban.cards.length + 1 })
         }
         return kanban
       })
@@ -90,8 +148,35 @@ export default {
     },
     deleteList () {
       const board = this.$store.getters.getBoardById(this.id)
-      board.kanban = board.kanban.filter(kanban => kanban.id !== this.lists.id)
+      board.kanban = board.kanban.filter(kanban => kanban.id !== this.list.id)
       this.$store.dispatch('patchBoard', board)
+      this.$store.commit('SET_MODALLIST', 0)
+    },
+    test () {
+      const board = this.$store.getters.getBoardById(this.id)
+      if (this.nameList === '') this.nameList = 'Null'
+      board.kanban = board.kanban.map(kanban => {
+        if (kanban.id === this.list.id) {
+          kanban.name = this.nameList
+        }
+        return kanban
+      })
+      this.$store.dispatch('patchBoard', board)
+      this.editNameList = false
+    },
+    openEdit () {
+      this.$store.commit('SET_MODALLIST', 0)
+      this.editNameList = true
+    }
+  },
+  computed: {
+    dragOptions () {
+      return {
+        animation: 0,
+        group: 'description',
+        disabled: !this.editable,
+        ghostClass: 'ghost'
+      }
     }
   }
 }
@@ -198,5 +283,34 @@ export default {
 .action-container:hover {
   background-color: #7d8185ad;
   cursor: pointer;
+}
+
+.card-group {
+  margin-top: 10px;
+  min-height: 10px;
+  list-style-type: none;
+}
+
+.ok {
+  height: 30px;
+  width: 30px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.ok:hover {
+  cursor: pointer;
+  background-color: #7d8185ad;
+}
+
+.input-nameList {
+  width: 100%;
+  margin: 2px 0;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.input-nameList:focus {
+  outline: none;
 }
 </style>

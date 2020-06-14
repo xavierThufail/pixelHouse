@@ -4,7 +4,7 @@
       <h1 class="h-txt">Organize anything</h1>
       <p>Kanban makes it easy to organize stuff, people, ideas, and anything else you can imagine with your team.</p>
       <router-link to="/dashboard" class="lp-btn">
-        <span>Get started!</span>
+        <span @click="start">Get started!</span>
       </router-link>
     </div>
     <img class="lp-img" src="../assets/kanban.png" alt="Kanban Board">
@@ -15,6 +15,11 @@
 export default {
   created () {
     this.$store.dispatch('getBoards')
+  },
+  methods: {
+    start () {
+      this.$store.commit('SET_START')
+    }
   }
 }
 </script>

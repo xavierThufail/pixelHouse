@@ -15,6 +15,108 @@
           ]
         }
       ]
+    },
+    {
+      "id": 2,
+      "title": "New Project",
+      "kanban": [
+        {
+          "name": "Not Started",
+          "id": 1,
+          "cards": [
+            {
+              "title": "Kanban",
+              "id": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Dream Cars",
+      "kanban": [
+        {
+          "name": "Owned",
+          "id": 1,
+          "cards": [
+            {
+              "title": "Ferrari",
+              "id": 1
+            },
+            {
+              "title": "Hummer",
+              "id": 2
+            },
+            {
+              "title": "Ford Mustang",
+              "id": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Pixel House",
+      "kanban": [
+        {
+          "name": "Staff",
+          "id": 1,
+          "cards": [
+            {
+              "title": "Wulan",
+              "id": 1
+            },
+            {
+              "title": "Raharjo",
+              "id": 2
+            },
+            {
+              "title": "Widya",
+              "id": 3
+            },
+            {
+              "title": "Yuda",
+              "id": 4
+            },
+            {
+              "title": "Cinta",
+              "id": 5
+            },
+            {
+              "title": "Iskandar",
+              "id": 6
+            },
+            {
+              "title": "Hidayat",
+              "id": 7
+            },
+            {
+              "title": "Kusuma",
+              "id": 8
+            },
+            {
+              "title": "Indah",
+              "id": 9
+            },
+            {
+              "title": "Jusuf",
+              "id": 10
+            }
+          ]
+        },
+        {
+          "name": "Male",
+          "id": 2,
+          "cards": []
+        },
+        {
+          "name": "Female",
+          "id": 3,
+          "cards": []
+        }
+      ]
     }
   ]
 }

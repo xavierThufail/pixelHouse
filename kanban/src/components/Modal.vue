@@ -29,6 +29,7 @@ export default {
       this.$store.commit('SET_SHOWMODAL')
     },
     createBoard () {
+      if (this.title === '') this.title = 'Null'
       this.$store.dispatch('addBoard', this.title)
       this.$store.commit('SET_SHOWMODAL')
       this.title = ''

@@ -1,7 +1,7 @@
 <template>
   <div class="nav">
     <nav>
-      <router-link to="/" class="logo">
+      <router-link :to="$store.state.start ? '/dashboard' : '/'" class="logo">
         <img class="logo-img" src="../assets/logo.png" alt="">
         <img class="logo-img" src="../assets/logo-name.png" alt="">
       </router-link>
