@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="board ? `/dashboard/${board.id}` : '/dashboard'" class="board">
+  <router-link :to="board ? `/dashboard/${board.id}` : '/dashboard'" class="board" :style="board ? 'background-color: #7a7e83' : ''">
     <h4>{{board ? board.title : 'Create new board'}}</h4>
   </router-link>
 </template>
