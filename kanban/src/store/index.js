@@ -10,7 +10,8 @@ export default new Vuex.Store({
     error: null,
     loading: false,
     showModal: false,
-    modalList: 0
+    modalList: 0,
+    inputCard: 0
   },
   mutations: {
     SET_BOARD (state, boards) {
@@ -30,6 +31,9 @@ export default new Vuex.Store({
     },
     SET_MODALLIST (state, payload) {
       state.modalList = payload
+    },
+    SET_INPUTCARD (state, payload) {
+      state.inputCard = payload
     },
     PATCH_BOARDS (state, payload) {
       state.boards = payload
@@ -65,7 +69,6 @@ export default new Vuex.Store({
           }
         ]
       })
-      console.log(body)
       axios({
         method: 'post',
         url: 'https://my-json-server.typicode.com/xavierThufail/pixelHouse/boards',
@@ -86,7 +89,9 @@ export default new Vuex.Store({
           commit('SET_LOADING')
         })
     },
-    addCard ({ commit, state }, board) {
+    // crud table 'Board' complete
+    // karena ini cuma 1 table: 'Board', untuk table lists dan card hanya menggunakan patch table 'Board'
+    patchBoard ({ commit, state }, board) {
       commit('SET_LOADING')
       axios({
         method: 'patch',
