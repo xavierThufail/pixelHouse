@@ -13,14 +13,15 @@
 
 <script>
 export default {
-
+  created () {
+    this.$store.dispatch('getBoards')
+  }
 }
 </script>
 
 <style>
 .landingPage {
   display: flex;
-  height: 90vh;
   padding: 30px;
   font-size: 30px;
   align-items: center;

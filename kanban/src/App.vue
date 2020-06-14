@@ -2,15 +2,18 @@
   <div id="app">
     <Navbar/>
     <router-view id="view"/>
+    <Modal/>
   </div>
 </template>
 
 <script>
 import Navbar from './components/Navbar'
+import Modal from './components/Modal'
 
 export default {
   components: {
-    Navbar
+    Navbar,
+    Modal
   }
 }
 </script>
@@ -21,10 +24,11 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #f7fbff;
+  position: relative;
 }
 
 #view {
-  padding-top: 50px;
+  height: 90vh;
 }
 
 * {

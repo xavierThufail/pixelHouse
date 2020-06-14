@@ -6,10 +6,10 @@
       "kanban": [
         {
           "name": "Not Started",
+          "id": 1,
           "lists": [
             {
-              "title": "test",
-              "desc": "belajar desc"
+              "title": "test"
             }
           ]
         }
